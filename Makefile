@@ -1,38 +1,25 @@
-CC=g++
-CFLAGS=-c -Wall -std=c++0x
-LDFLAGS=-lcrypto
-CLIENTSOURCES=main.cpp\
-		user.cpp\
-		response.cpp\
-		request.cpp\
-		parse.cpp\
-		socket.cpp\
+DIRS    := src
+SOURCES := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
+OBJS    := $(patsubst %.cpp, %.o, $(SOURCES))
+OBJS    := $(foreach o,$(OBJS),./obj/$(o))
+DEPFILES:= $(patsubst %.o, %.P, $(OBJS))
 
-ifeq ($(shell uname), SunOS)
-	LDFLAGS += -lsocket -lnsl
-endif
-
-
-SOURCES=$(CLIENTSOURCES)
-
-CLIENTOBJECTS=$(CLIENTSOURCES:.cpp=.o)
-	CLIENT=client
-
-all: $(SOURCES) $(CLIENT)
-		
-$(CLIENT): $(CLIENTOBJECTS) 
-		$(CC) $(CLIENTOBJECTS) $(LDFLAGS) -o $@
-
-.cpp.o:
-		$(CC) $(CFLAGS) $< -o $@
-
-clean :
-	rm *.o
-	rm client
-
-%.P : %.c
-	$(MAKEDEPEND)
-	@sed 's/\($*\)\.o[ :]*/\1.o $@ : /g' < $*.d > $@; \
-	  rm -f $*.d; [ -s $@ ] || rm -f $@
-
-include $(SRCS:.c=.P)
+CFLAGS   = -Wall -MMD -std=c++0x -c 
+COMPILER = g++
+ 
+#link the executable
+client: $(OBJS)
+	$(COMPILER) $(OBJS) -o client
+ 
+#generate dependency information and compile
+obj/%.o : %.cpp
+	@mkdir -p $(@D)
+	$(COMPILER) $(CFLAGS) -o $@ -MF obj/$*.P $<
+ 
+#remove all generated files
+clean:
+	rm -f client
+	rm -rf obj
+ 
+#include the dependency information
+-include $(DEPFILES)
