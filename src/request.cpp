@@ -2,13 +2,13 @@
 #include <stdlib.h>
 
 Request::Request() {
-    command_ = getCom;
+    command_ = "";
     name_ = "";
     location_ = "";
     age_ = 0;
     password_ = "";
 }
-Request::Request(Command command, 
+Request::Request(string command, 
                  string name, 
                  string location, 
                  int age, 
@@ -33,22 +33,10 @@ string Request::getQuery(string key) {
 
 void Request::setData() {
     try {
-        string command = query_.at("command");
-        if (!command.compare("get")) {
-            command_ = getCom;
-        }
-        else if (!command.compare("set")) {
-            command_ = setCom;
-        }
-        else if (!command.compare("del")) {
-            command_ = delCom;
-        }
-        else {
-            command_ = noCom;
-        }
+        command_ = query_.at("command");
     }
     catch (const exception &ex) {
-        command_ = noCom;
+        command_ = "";
     }
     try {
         name_ = query_.at("name");
@@ -84,7 +72,6 @@ void Request::push(User &User) {
 }
 
 void Request::set(User &User) {
-    command_ = setCom;
     name_ = User.getName();
     location_ = User.getLocation();
     age_ = User.getAge();

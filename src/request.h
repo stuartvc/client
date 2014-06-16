@@ -18,13 +18,13 @@ enum Command {
 class Request {
     public:
         Request();
-        Request(Command command, 
+        Request(string command, 
                  string name, 
                  string location, 
                  int age, 
                  string password);
 
-        inline Command getCommand() {
+        inline string getCommand() {
             return command_;
         }
 
@@ -49,6 +49,10 @@ class Request {
             return;
         }
 
+        inline void setCommand(std::string command) {
+            command_ = command;
+        }
+
         string getQuery(string key);
 
         void setData();
@@ -58,7 +62,7 @@ class Request {
         void set(User &User);
 
     private:
-        Command command_;
+        string command_;
         string name_;
         string location_;
         int age_;

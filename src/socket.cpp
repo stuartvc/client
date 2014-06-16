@@ -38,7 +38,8 @@ void Socket::writeRequest(Request &request) {
     char buffer[256];
     int len;
     memset(buffer, 0, 256);
-    sprintf(buffer, "command=set:name=%s:location=%s:age=%i:password=%s",
+    sprintf(buffer, "command=%s:name=%s:location=%s:age=%i:password=%s",
+            request.getCommand().c_str(),
             request.getName().c_str(),
             request.getLocation().c_str(),
             request.getAge(),
