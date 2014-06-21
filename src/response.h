@@ -14,6 +14,10 @@ class Response {
                  int age, 
                  string password);
 
+        inline string getSuccess() {
+            return success_;
+        }
+
         inline string getName() {
             return name_;
         }
@@ -30,6 +34,10 @@ class Response {
             return password_;
         }
 
+        inline string getMessage() {
+            return message_;
+        }
+
         void set(User &User);
 
         inline void addQuery(map<string, string> query) {
@@ -39,11 +47,15 @@ class Response {
 
         string getQuery(string key);
 
+        void setData();
+
     private:
+        string success_;
         string name_;
         string location_;
         int age_;
         string password_;
+        string message_;
         map<string, string> query_;
 };
 

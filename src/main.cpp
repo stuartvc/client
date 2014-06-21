@@ -36,6 +36,7 @@ int main() {
         cout << "error" << endl;
         exit(1);
     }
+    Print print;
 
     for (std::vector<UserPtr>::iterator it = userVec.begin(); it != userVec.end(); ++it) {
         Socket socket;
@@ -45,22 +46,8 @@ int main() {
         request.setCommand(command);
         socket.writeRequest(request);
         socket.readResponse(response);
+        print.addResponse(response);
     }
-    std::vector<std::string> temp;
-    temp.push_back("hello");
-    temp.push_back("test");
-    temp.push_back("long");
-    std::vector<std::vector<std::string> > test;
-    std::vector<std::string> test1;
-    test1.push_back("0");
-    test1.push_back("ft");
-    test1.push_back("sfgahsdghig");
-    test.push_back(test1);
-    test1[0] = ("stu");
-    test1[1] = ("1");
-    test1[2] = ("fer");
-    test.push_back(test1);
-    Print print(temp, test);
     print.printTable();
 
     return 0;

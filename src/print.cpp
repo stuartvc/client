@@ -3,6 +3,11 @@
 #include <iomanip>
 
 Print::Print() {
+    headers_.push_back("success");
+    headers_.push_back("name");
+    headers_.push_back("location");
+    headers_.push_back("age");
+    headers_.push_back("message");
 }
 
 Print::Print(std::vector<std::string> headers, 
@@ -15,12 +20,15 @@ void Print::printTable() {
 
     //calculate width
     calcWidth();
+    std::cout << std::endl;
     for (std::vector<std::string>::iterator it = headers_.begin();
             it != headers_.end();
             ++it) {
         std::cout << std::setw(width_[it - headers_.begin()]) << *it << "|";
     }
     std::cout << std::endl;
+    std::cout << std::setw(totalWidth_) << setfill('-') << "-" << setfill(' ') << endl;
+
     for (std::vector<std::vector<std::string> >::iterator it = rows_.begin();
             it != rows_.end();
             ++it) {
@@ -31,16 +39,25 @@ void Print::printTable() {
         }
         std::cout << std::endl;
     }
-
-
-
+    std::cout << std::endl;
 }
+
+void Print::addResponse(Response response) {
+    vector<std::string> row;
+    row.push_back(response.getSuccess());
+    row.push_back(response.getName());
+    row.push_back(response.getLocation());
+    row.push_back(to_string(response.getAge()));
+    row.push_back(response.getMessage());
+    rows_.push_back(row);
+}
+
 void Print::calcWidth() {
+    totalWidth_ = 0;
     for (std::vector<std::string>::iterator it = headers_.begin();
             it != headers_.end();
             ++it) {
         width_.push_back(it->length());
-        std::cout << it->length() << " ";
     }
     for (std::vector<std::vector<std::string> >::iterator it = rows_.begin();
             it != rows_.end();
@@ -50,10 +67,9 @@ void Print::calcWidth() {
                 ++iter) {
             if (width_[iter - it->begin()] < iter->length())
                 width_[iter - it->begin()] = iter->length();
-            std::cout << iter->length() << " ";
         }
-        std::cout << std::endl;
     }
-
-    std::cout << std::endl;
+    for (std::vector<unsigned int>::iterator it = width_.begin(); it != width_.end(); ++it) {
+            ++totalWidth_ += *it;
+    }
 }

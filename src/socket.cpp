@@ -29,9 +29,8 @@ void Socket::readResponse(Response &response) {
     if (n < 0) error("ERROR reading from socket");
 
     //log.log("Got message: " + std::string(buffer) + " from: " + std::string(addr));
-    cout << "read: " << buffer << endl;
     parse(response, buffer);
-    //response.setData();
+    response.setData();
 }
 
 void Socket::writeRequest(Request &request) {
@@ -46,7 +45,6 @@ void Socket::writeRequest(Request &request) {
             request.getPassword().c_str());
     len = strlen(buffer);
     //log.log("sent message: " + std::string(buffer));
-    cout << "sent: " << buffer << endl;
     int n = write(sockfd_,buffer,len);
     if (n < 0) error("ERROR writing to socket");
 }
